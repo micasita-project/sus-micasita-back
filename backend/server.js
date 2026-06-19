@@ -19,7 +19,15 @@ app.use(cors({
 }));
 app.use(express.json());
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const poolConfig = {
+  connectionString: process.env.DATABASE_URL,
+};
+
+if (process.env.DATABASE_URL && (process.env.DATABASE_URL.includes('supabase.co') || process.env.PGSSLMODE === 'require')) {
+  poolConfig.ssl = { rejectUnauthorized: false };
+}
+
+const pool = new Pool(poolConfig);
 
 const CREATE_TABLE_SQL = `
 CREATE TABLE IF NOT EXISTS sus_sessions (

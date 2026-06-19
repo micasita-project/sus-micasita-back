@@ -64,6 +64,29 @@ Copiar `.env.example` → `.env` y completar:
 
 ---
 
+## Deploy gratis con Supabase
+
+Supabase te sirve como base de datos PostgreSQL gratis. Para este backend, lo más simple es:
+
+1. Crear un proyecto en Supabase
+2. Ir a `Project Settings` → `Database` → `Connection string`
+3. Copiar la cadena `URI` y pegarla en `DATABASE_URL`
+4. Agregar `PGSSLMODE=require` en tu `.env` o en las variables del host
+5. Desplegar el backend en un host gratuito compatible con Node.js, por ejemplo una VM free tier
+
+Si lo vas a correr localmente, basta con crear tu `.env` así:
+
+```bash
+DATABASE_URL=postgresql://postgres:...@db.<ref>.supabase.co:5432/postgres
+PGSSLMODE=require
+FRONTEND_URL=http://localhost:5173
+PORT=3000
+```
+
+La tabla `sus_sessions` se crea sola al arrancar, así que no necesitas migraciones.
+
+---
+
 ## Estructura
 
 ```
