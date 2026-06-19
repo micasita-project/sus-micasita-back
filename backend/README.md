@@ -64,15 +64,31 @@ Copiar `.env.example` → `.env` y completar:
 
 ---
 
-## Deploy gratis con Supabase
+## Deploy con Supabase
 
-Supabase te sirve como base de datos PostgreSQL gratis. Para este backend, lo más simple es:
+Supabase no despliega un servidor Express como `server.js`. Lo que sí te da gratis es la base de datos PostgreSQL, autenticación, storage y funciones serverless.
+
+### Opción recomendada
 
 1. Crear un proyecto en Supabase
 2. Ir a `Project Settings` → `Database` → `Connection string`
 3. Copiar la cadena `URI` y pegarla en `DATABASE_URL`
 4. Agregar `PGSSLMODE=require` en tu `.env` o en las variables del host
-5. Desplegar el backend en un host gratuito compatible con Node.js, por ejemplo una VM free tier
+5. Desplegar el backend Express en otro host gratuito para Node.js
+
+### Si quieres que todo viva dentro de Supabase
+
+Tendrías que reescribir este backend como `Supabase Edge Functions`.
+Eso implica cambiar rutas Express por funciones Deno y adaptar la lógica de `Pool` y `app.get/app.post` a handlers de Supabase.
+
+### Importante
+
+El frontend no debe hacer fetch a `https://<tu-proyecto>.supabase.co/api/...`.
+Ese dominio es de la base de datos y del panel de Supabase, no de tu API Express.
+La URL que debe usar tu frontend es la del backend donde publiques `server.js`.
+
+Si hoy ves errores de CORS con una URL de Supabase, significa que la variable de entorno del frontend apunta al host equivocado.
+Corrígela para que apunte al backend real, por ejemplo `https://tu-backend.onrender.com` o `https://tu-backend.railway.app`.
 
 Si lo vas a correr localmente, basta con crear tu `.env` así:
 
